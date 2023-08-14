@@ -1,24 +1,60 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# テーブル設計
 
-Things you may want to cover:
+## users テーブル
 
-* Ruby version
+| Column             | Type   | Options             |
+| ------------------ | ------ | ------------------- |
+| nickname           | string | null: false         |
+| email              | string | null: false, unique |
+| password           | string | null: false         |
+| last_name          | string | null: false         |
+| fist_name          | string | null: false         |
+| last_name_kana     | string | null: false         |
+| fist_name_kana     | string | null: false         |
 
-* System dependencies
+### Association
+- has_many :item
+- has_many :buys
 
-* Configuration
+##  items テーブル
 
-* Database creation
+| Column              | Type       | Options                        |
+| ------------------- | ---------- | ------------------------------ |
+| image               | string     | null: false                    |
+| name                | string     | null: false                    |
+| text                | text       | null: false                    |
+| category            | string     | null: false                    |
+| sales_status        | string     | null: false                    |
+| shipping_fee_status | string     | null: false                    |
+| prefecture          | string     | null: false                    |
+| scheduled_delivery  | string     | null: false                    |
+| prise               | string     | null: false                    |
+| user                | references | null: false, foreign_key: true |
 
-* Database initialization
+### Association
+- has_many :user
 
-* How to run the test suite
+##  orders テーブル
 
-* Services (job queues, cache servers, search engines, etc.)
+| Column        | Type       | Options     |
+| ------------- | ---------- | ----------- |
+| postal_code   | string     | null: false |
+| prefecture    | string     | null: false |
+| city          | string     | null: false |
+| addresses     | string     | null: false |
+| building      | string     | null: false |
+| phone_numeber | string     | null: false |
 
-* Deployment instructions
+##  buys テーブル
 
-* ...
+| Column    | Type       | Options                        |
+| --------- | ---------- | ------------------------------ |
+| item      | references | null: false, foreign_key: true |
+| user      | references | null: false, foreign_key: true |
+
+### Association
+
+- belongs_to :item
+- belongs_to :user
