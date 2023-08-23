@@ -18,6 +18,6 @@ class ItemsController < ApplicationController
     params.require(:item).permit(:name, :image, :text, :content).merge(user_id: current_user.id)
   end
 
-  end
 
+  
 end
