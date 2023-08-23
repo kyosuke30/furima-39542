@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Item, type: :model do
   before do
-    @item = FactoryBot.build(:item)
+    @item = FactoryBot.create(:item)
   end
 
   describe '商品出品機能' do
@@ -25,32 +25,32 @@ RSpec.describe Item, type: :model do
         expect(@item.errors.full_messages).to include("Text can't be blank")
       end
 
-      it 'category_idが空では登録できない' do
-        @item.category_id = ''
+      it 'category_idが---では登録できない' do
+        @item.category_id = '1'
         @item.valid?
         expect(@item.errors.full_messages).to include("Category can't be blank")
       end
 
-      it 'sales_status_idが空では登録できない' do
-        @item.sales_status_id = ''
+      it 'sales_status_idが---では登録できない' do
+        @item.sales_status_id = 1
         @item.valid?
         expect(@item.errors.full_messages).to include("Sales status can't be blank")
       end
 
-      it 'shipping_fee_status_idが空では登録できない' do
-        @item.shipping_fee_status_id = ''
+      it 'shipping_fee_status_idが---では登録できない' do
+        @item.shipping_fee_status_id = '1'
         @item.valid?
         expect(@item.errors.full_messages).to include("Shipping fee status can't be blank")
       end
 
-      it 'prefecture_idが空では登録できない' do
-        @item.prefecture_id = ''
+      it 'prefecture_idが---では登録できない' do
+        @item.prefecture_id = 1
         @item.valid?
         expect(@item.errors.full_messages).to include("Prefecture can't be blank")
       end
 
-      it 'scheduled_delivery_idが空では登録できない' do
-        @item.scheduled_delivery_id = ''
+      it 'scheduled_delivery_idが---では登録できない' do
+        @item.scheduled_delivery_id = 1
         @item.valid?
         expect(@item.errors.full_messages).to include("Scheduled delivery can't be blank")
       end
@@ -59,6 +59,36 @@ RSpec.describe Item, type: :model do
         @item.price = ''
         @item.valid?
         expect(@item.errors.full_messages).to include("Price can't be blank")
+      end
+
+      it 'priceは全角文字では登録できない' do
+        @item.price = '１あア亜'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Price is not a number")
+      end
+
+      it 'priceは半角英数混合では登録できない' do
+        @item.price = 'aaa11'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Price is not a number")
+      end
+
+      it 'priceは半角英語では登録できない' do
+        @item.price = 'aaaaa'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Price is not a number")
+      end
+
+      it 'ユーザーが紐づいていないと保存できない' do
+        @item.user_id = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include('User must exist', "User can't be blank")
+      end
+
+      it '画像がないと保存できない' do
+        @item.image = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Image can't be blank")
       end
     end
   end
