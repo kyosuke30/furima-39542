@@ -20,7 +20,7 @@ class Item < ApplicationRecord
     validates :shipping_fee_status_id
     validates :prefecture_id
     validates :scheduled_delivery_id
-    validates :price, numericality: { greater_than: 300, less_than_or_equal_to: 9999999 }
+    validates :price, numericality: { greater_than: 300, less_than_or_equal_to: 9999999, only_integer: true }
   end
 
   with_options numericality: { other_than: 1 , message: "can't be blank"} do

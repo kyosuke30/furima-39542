@@ -90,6 +90,19 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include("Image can't be blank")
       end
+
+      it '価格のが300円未満では出品できない' do
+        @item.price = 100
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Price must be greater than 300')
+      end
+      
+      it '価格のが9,999,999円を超えると出品できない' do
+        @item.price = 10_000_000
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Price must be less than or equal to 9999999')
+      end
+
     end
   end
 end
