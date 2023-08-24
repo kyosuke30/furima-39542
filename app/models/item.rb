@@ -5,7 +5,7 @@ class Item < ApplicationRecord
 
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to :category
-  belongs_to :sales_status
+  belongs_to :salesstatus
   belongs_to :shipping_fee_status
   belongs_to :prefecture
   belongs_to :scheduled_delivery
@@ -20,7 +20,7 @@ class Item < ApplicationRecord
     validates :shipping_fee_status_id
     validates :prefecture_id
     validates :scheduled_delivery_id
-    validates :price, numericality: { greater_than: 300, less_than_or_equal_to: 9999999, only_integer: true }
+    validates :price, numericality: { greater_than: 299, less_than_or_equal_to: 9999999, only_integer: true }
   end
 
   with_options numericality: { other_than: 1 , message: "can't be blank"} do
