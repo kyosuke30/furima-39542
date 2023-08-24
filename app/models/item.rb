@@ -5,10 +5,10 @@ class Item < ApplicationRecord
 
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to :category
-  belongs_to :salesstatus
-  belongs_to :shipping_fee_status
+  belongs_to :sales_status, class_name: 'Salestatus'
+  belongs_to :shipping_fee_status, class_name: 'Shippingfeestatus'
   belongs_to :prefecture
-  belongs_to :scheduleddelivery
+  belongs_to :scheduled_delivery, class_name: 'Scheduleddelivery'
 
   with_options presence: true do
     validates :image
