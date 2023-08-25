@@ -1,7 +1,13 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
   before_action :authenticate_user!, except: [:index, :show]
-  
+  # 重複処理をまとめる
+  before_action :set_item, only: [:show, :edit, :update]
+ 
+  def set_item
+    @item = Item.find(params[:id])
+  end
+
   def index
     @items = Item.all.order('created_at DESC')
   end
@@ -21,11 +27,9 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = Item.find(params[:id])
   end
 
   def edit
-    @item = Item.find(params[:id])
     if current_user.id == @item.user_id
     else
       redirect_to root_path
@@ -33,7 +37,6 @@ class ItemsController < ApplicationController
   end
 
   def update
-    @item = Item.find(params[:id])
     @item.update(item_params)
     if @item.valid?
       redirect_to item_path(item_params)
