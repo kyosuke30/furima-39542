@@ -3,6 +3,7 @@ class OrdersController < ApplicationController
   before_action :non_purchased_item, only: [:index, :create]
 
   def index
+    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
     @order_form = OrderForm.new
   end
 
@@ -13,29 +14,30 @@ class OrdersController < ApplicationController
       @order_form.save
       redirect_to root_path
     else
-      render :index
+      render 'index', status: :unprocessable_entity
     end
   end
 
   private
 
   def order_params
-    # この時点では、order_idが不要。またrequire外の情報は参照するため、mergeとする。 
-    params.require(:order_form).permit(:postal_code, :prefecture_id, :city, :addresse, :building, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
+    params.require(:order_form).permit(:postal_code, :prefecture_id, :city, :addresse, :building, :phone_number).merge(
+      user_id: current_user.id, item_id: params[:item_id], token: params[:token]
+    )
   end
 
   def pay_item
-    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY'] # 自身のPAY.JPテスト秘密鍵を記述しましょう
     Payjp::Charge.create(
-      amount: @item.price,        # 商品の値段
+      amount: @item.price, # 商品の値段
       card: order_params[:token], # カードトークン
-      currency: 'jpy'             # 通貨の種類（日本円）
+      currency: 'jpy' # 通貨の種類（日本円）
     )
   end
 
   def non_purchased_item
     # itemがあっての、order_form（入れ子構造）。他のコントローラーで生成されたitemを使うにはcreateアクションに定義する。
     @item = Item.find(params[:item_id])
-    redirect_to root_path if current_user.id == @item.user_id || @item.order.present?
+    redirect_to root_path if current_user.id == @item.user_id || @item.buy.present?
   end
 end

@@ -19,8 +19,9 @@ class OrderForm
   end
 
   def save
-    order = Order.create(user_id: user_id, item_id: item_id)
+    buy = Buy.create(user_id:, item_id:)
     # ストロングパラメーターでデータが運ばれ、それらが保存のタイミングで「order_id」が生成され、保存される。
-    Order.create(order_id: order.id, postal_code: postal_code, prefecture_id: prefecture_id, city: city, addresse: addresse, building: building, phone_number: phone_number)
+    Order.create(buy_id: buy.id, postal_code:, prefecture_id:, city:, addresse:,
+                 building:, phone_number:)
   end
 end
