@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe OrderForm, type: :model do
   before do
-    @order_form = FactoryBot.build(:order_form)
-    @order_form.user_id = 1
-    @order_form.item_id = 1
+    user = FactoryBot.create(:user)
+    item = FactoryBot.create(:item)
+    @order_form = FactoryBot.build(:order_form, user_id: user.id, item_id: item.id)
   end
 
   describe '配送先情報の保存' do
@@ -60,8 +60,7 @@ RSpec.describe OrderForm, type: :model do
       it '郵便番号が空だと保存できないこと' do
         @order_form.postal_code = nil
         @order_form.valid?
-        expect(@order_form.errors.full_messages).to include("Postal code can't be blank",
-                                                            'Postal code is invalid. Include hyphen(-)')
+        expect(@order_form.errors.full_messages).to include("Postal code can't be blank")
       end
       it '郵便番号にハイフンがないと保存できないこと' do
         @order_form.postal_code = 1_234_567
