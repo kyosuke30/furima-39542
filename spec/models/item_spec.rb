@@ -11,7 +11,7 @@ RSpec.describe Item, type: :model do
         expect(@item).to be_valid
       end
     end
-    
+
     context '商品出品できないとき' do
       it 'nameが空では登録できない' do
         @item.name = ''
@@ -54,7 +54,7 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include("Scheduled delivery can't be blank")
       end
-      
+
       it 'priceが空では登録できない' do
         @item.price = ''
         @item.valid?
@@ -64,19 +64,19 @@ RSpec.describe Item, type: :model do
       it 'priceは全角文字では登録できない' do
         @item.price = '１あア亜'
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price is not a number")
+        expect(@item.errors.full_messages).to include('Price is not a number')
       end
 
       it 'priceは半角英数混合では登録できない' do
         @item.price = 'aaa11'
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price is not a number")
+        expect(@item.errors.full_messages).to include('Price is not a number')
       end
 
       it 'priceは半角英語では登録できない' do
         @item.price = 'aaaaa'
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price is not a number")
+        expect(@item.errors.full_messages).to include('Price is not a number')
       end
 
       it 'ユーザーが紐づいていないと保存できない' do
@@ -96,13 +96,12 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include('Price must be greater than 300')
       end
-      
+
       it '価格のが9,999,999円を超えると出品できない' do
         @item.price = 10_000_000
         @item.valid?
         expect(@item.errors.full_messages).to include('Price must be less than or equal to 9999999')
       end
-
     end
   end
 end
